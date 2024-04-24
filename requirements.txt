@@ -1,0 +1,19 @@
+django
+djangorestframework
+djangorestframework_simplejwt
+django-cors-headers
+djoser
+requests
+cloudinary
+python-decouple
+psycopg2-binary
+dj-database-url
+drf-yasg
+gunicorn
+whitenoise
+
+backend_ecommerce/settings.py
+# Điều chỉnh ALLOWED_HOSTS chỉ cho phép những đường dẫn hợp lệ truy cập
+# 'http://localhost:5173' -> url FRONTEND
+ALLOWED_HOSTS = ['.vercel.app', 'http://localhost:5173', '127.0.0.1']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
