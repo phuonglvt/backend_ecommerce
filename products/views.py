@@ -7,6 +7,12 @@ from .models import Category, Product, ProductImage, ProductComment
 from backend_ecommerce.helpers import custom_response, parse_request
 from rest_framework.parsers import JSONParser
 from json import JSONDecodeError
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+# from django.contrib.auth.models import User 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 
 class CategoryAPIView(views.APIView):
@@ -218,7 +224,7 @@ class ProductCommentAPIView(views.APIView):
         try:
             data = parse_request(request)
             product = Product.objects.get(id=data['product_id'])
-            user = User.objects.get(id=data['user_id'])
+            user = User.objects.get(id=data['user_id']) # Giống code cũ nhưng import khác nhé
             product_comment = ProductComment(
                 product_id=product,
                 rating=data['rating'],
@@ -230,7 +236,8 @@ class ProductCommentAPIView(views.APIView):
             serializer = ProductCommentSerializer(product_comment)
             return custom_response('Create product comment successfully!', 'Success', serializer.data, 201)
         except Exception as e:
-            return custom_response('Create product comment failed', 'Error', {"error": str(e)}, 400)
+            return custom_response('Create product comment failed', 'Error', [str(e)], 400)
+
 
 
 class ProductCommentDetailAPIView(views.APIView):

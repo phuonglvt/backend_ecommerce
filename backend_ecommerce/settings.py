@@ -15,6 +15,8 @@ from pathlib import Path
 import cloudinary.api
 from decouple import config
 
+ALLOWED_HOSTS = ['.vercel.app', '*']
+
 cloudinary.config(
     cloud_name=config("CLOUDINARY_CLOUD_NAME"),
     api_key=config("CLOUDINARY_API_KEY"),
@@ -51,6 +53,9 @@ INSTALLED_APPS = [
     'products',
     "cloudinary",
     "upload",
+    "rest_framework.authtoken",
+    "djoser",
+    "user",
 ]
 
 MIDDLEWARE = [
@@ -61,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'backend_ecommerce.urls'
@@ -135,3 +141,33 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Sử dụng JWT làm phương thức xác thực cho API
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # Định nghĩa các quyền truy cập cho API
+        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ),
+}
+
+SIMPLE_JWT = {
+    # Thay đổi thời gian hết hạn của token
+    'ACCESS_TOKEN_LIFETIME': TimeoutError(),
+}
+
+DJOSER = {
+    # Disable tính năng gửi email kích hoạt tài khoản
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {
+        'user': 'user.serializers.UserAccountSerializer',
+        'current_user': 'user.serializers.UserAccountSerializer',
+    },
+}
+
+AUTH_USER_MODEL = 'user.UserAccount'
+

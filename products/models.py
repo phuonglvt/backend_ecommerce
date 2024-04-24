@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User 
+from django.conf import settings
+
 
 class Category(models.Model):
 
@@ -66,7 +68,7 @@ class ProductComment(models.Model):
     rating = models.IntegerField()
     comment = models.CharField(max_length=512)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_comments', null=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     # ForeignKey('self',...) diễn tả mối quan hệ cha - con trong cùng một bảng
     # Một comment có nhiều người rep lại, thì comment gốc sẽ không có parent_id...
     # còn các comment rep lại sẽ có parent_id là id của comment gốc
